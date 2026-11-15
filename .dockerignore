@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.agents
+.gemini
+Dockerfile*
+docker-compose*
+*.md
+.env*
+!.env.example

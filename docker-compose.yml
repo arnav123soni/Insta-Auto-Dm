@@ -1,0 +1,129 @@
+name: openreply
+
+services:
+  # 1. PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: openreply-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: openreply
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d openreply"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Redis Message Queue
+  redis:
+    image: redis:7-alpine
+    container_name: openreply-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 3. Next.js Web App
+  web:
+    build:
+      context: .
+      target: runner-web
+    container_name: openreply-web
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-9f8c6b4d2a1e0f3b5c7a9e1d3f5b7c9a}
+      - CRON_SECRET=${CRON_SECRET:-9f8c6b4d2a1e0f3b5c7a9e1d3f5b7c9a}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}
+      - DATABASE_URL=postgresql://postgres:postgrespassword@postgres:5432/openreply?sslmode=disable
+      - REDIS_URL=redis://redis:6379
+      - META_GRAPH_API_VERSION=${META_GRAPH_API_VERSION:-v25.0}
+      - INSTAGRAM_APP_ID=${INSTAGRAM_APP_ID:-}
+      - INSTAGRAM_APP_SECRET=${INSTAGRAM_APP_SECRET:-}
+      - FACEBOOK_APP_SECRET=${FACEBOOK_APP_SECRET:-}
+      - WEBHOOK_VERIFY_TOKEN=${WEBHOOK_VERIFY_TOKEN:-openreply_webhook_verify_token}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_ADMIN_CHAT_ID=${TELEGRAM_ADMIN_CHAT_ID:-}
+      # ── Local-dev: bypass login ──────────────────────────────────────────────
+      - LOCAL_OWNER_ID=${LOCAL_OWNER_ID:-local-owner-id}
+      - LOCAL_OWNER_EMAIL=${LOCAL_OWNER_EMAIL:-owner@instareply.local}
+      - LOCAL_OWNER_NAME=${LOCAL_OWNER_NAME:-InstaReply Owner}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # 4. Background BullMQ Worker (Handles DMs & Comment Processing)
+  worker:
+    build:
+      context: .
+      target: runner-worker
+    container_name: openreply-worker
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-9f8c6b4d2a1e0f3b5c7a9e1d3f5b7c9a}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}
+      - DATABASE_URL=postgresql://postgres:postgrespassword@postgres:5432/openreply?sslmode=disable
+      - REDIS_URL=redis://redis:6379
+      - META_GRAPH_API_VERSION=${META_GRAPH_API_VERSION:-v25.0}
+      - INSTAGRAM_APP_ID=${INSTAGRAM_APP_ID:-}
+      - INSTAGRAM_APP_SECRET=${INSTAGRAM_APP_SECRET:-}
+      - FACEBOOK_APP_SECRET=${FACEBOOK_APP_SECRET:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # 5. Periodic Cron Scheduler (Token refresh, reconciliation, follower snapshots)
+  cron:
+    build:
+      context: .
+      target: runner-web
+    container_name: openreply-cron
+    restart: always
+    entrypoint: ["sh", "scripts/cron.sh"]
+    environment:
+      - CRON_BASE_URL=http://web:3000
+      - CRON_SECRET=${CRON_SECRET:-${NEXTAUTH_SECRET:-9f8c6b4d2a1e0f3b5c7a9e1d3f5b7c9a}}
+    depends_on:
+      - web
+
+  # 6. Ngrok Tunnel (Automatic public webhook forwarding)
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: openreply-ngrok
+    restart: always
+    ports:
+      - "4040:4040"
+    command:
+      - "http"
+      - "web:3000"
+      - "--url=${NGROK_DOMAIN:-kate-postmeiotic-amanda.ngrok-free.dev}"
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  redis_data:
