@@ -1,0 +1,8 @@
+-- CreateEnum
+CREATE TYPE "OnboardingStatus" AS ENUM ('PENDING_INVITE', 'INVITE_SENT', 'INVITE_ACCEPTED', 'ACTIVE');
+
+-- AlterTable
+ALTER TABLE "InstagramAccount" 
+ADD COLUMN IF NOT EXISTS "onboardingStatus" "OnboardingStatus" NOT NULL DEFAULT 'ACTIVE',
+ADD COLUMN IF NOT EXISTS "inviteSentAt" TIMESTAMP(3),
+ADD COLUMN IF NOT EXISTS "inviteAcceptedAt" TIMESTAMP(3);
