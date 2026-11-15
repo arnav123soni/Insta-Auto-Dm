@@ -11,9 +11,12 @@ echo "=========================================================="
 echo "  Preparing Fresh Oracle Cloud VM for Insta AutoDm"
 echo "=========================================================="
 
-# 1. Update OS Packages
+# 1. Update OS Packages (Non-interactive to prevent purple dialog screens)
 echo "==> [1/5] Updating system packages..."
-sudo apt-get update -y && sudo apt-get upgrade -y
+export DEBIAN_FRONTEND=noninteractive
+export NEEDRESTART_MODE=a
+sudo sed -i "s/#\$nrconf{restart} = 'i';/\$nrconf{restart} = 'a';/g" /etc/needrestart/needrestart.conf 2>/dev/null || true
+sudo DEBIAN_FRONTEND=noninteractive apt-get update -y && sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 
 # 2. Setup 4GB Swapfile (Prevents Out-Of-Memory during Next.js build)
 echo "==> [2/5] Configuring 4GB Swap space..."
@@ -45,15 +48,15 @@ fi
 # 4. Install Docker & Docker Compose
 echo "==> [4/5] Installing Docker Engine & Docker Compose..."
 if ! command -v docker &> /dev/null; then
-  sudo apt-get install -y ca-certificates curl gnupg lsb-release git nginx certbot python3-certbot-nginx
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates curl gnupg lsb-release git nginx certbot python3-certbot-nginx
   sudo install -m 0755 -d /etc/apt/keyrings
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
   sudo chmod a+r /etc/apt/keyrings/docker.gpg
   echo \
     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-  sudo apt-get update -y
-  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   sudo usermod -aG docker $USER
   echo "Docker installed successfully."
 else
