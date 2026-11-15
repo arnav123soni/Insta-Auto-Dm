@@ -108,22 +108,6 @@ services:
     depends_on:
       - web
 
-  # 6. Ngrok Tunnel (Automatic public webhook forwarding)
-  ngrok:
-    image: ngrok/ngrok:latest
-    container_name: openreply-ngrok
-    restart: always
-    ports:
-      - "4040:4040"
-    command:
-      - "http"
-      - "web:3000"
-      - "--url=${NGROK_DOMAIN:-kate-postmeiotic-amanda.ngrok-free.dev}"
-    environment:
-      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
-    depends_on:
-      - web
-
 volumes:
   postgres_data:
   redis_data:
