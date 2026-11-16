@@ -10,6 +10,7 @@ import LanguageSwitcher from "@/components/language-switcher";
 import { useI18n } from "@/lib/i18n/provider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import {
   LayoutDashboard,
@@ -18,6 +19,7 @@ import {
   Megaphone,
   ScrollText,
   Settings,
+  User,
   Activity,
 } from "lucide-react";
 
@@ -28,6 +30,7 @@ const navItems = [
   { label: "Campaigns", href: "/campaigns", icon: Megaphone },
   { label: "DM Logs", href: "/logs", icon: ScrollText },
   { label: "Settings", href: "/settings", icon: Settings },
+  { label: "Profile", href: "/profile", icon: User },
   { label: "Diagnostics", href: "/diagnostics", icon: Activity },
 ] as const;
 
@@ -72,9 +75,15 @@ export default function Sidebar({
             href="/dashboard"
             className="flex items-center gap-3 group focus:outline-none"
           >
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-xl gradient-instagram shadow-md shadow-pink-500/20 group-hover:scale-105 transition-transform duration-200">
-              <span className="text-sm font-black text-white tracking-wider">IR</span>
-              <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+            <div className="relative flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden shadow-md shadow-pink-500/20 group-hover:scale-105 transition-transform duration-200 ring-1 ring-white/10 bg-black/40">
+              <Image
+                src="/brand/icon-mark.png"
+                alt="InstaReply"
+                fill
+                sizes="36px"
+                className="object-cover"
+              />
+              <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5 z-10">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
               </span>

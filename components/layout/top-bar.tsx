@@ -7,11 +7,13 @@
  * connected Instagram pill, and fast campaign creator CTA.
  */
 
+import { useState, useRef, useEffect } from "react";
 import type { StaticMessageKey } from "@/lib/i18n";
 import { useI18n } from "@/lib/i18n/provider";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Menu, Plus } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { Menu, Plus, User, LogOut, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -36,6 +38,7 @@ const pageTitles: Record<string, StaticMessageKey> = {
   "/automations/new": "New Campaign",
   "/logs": "DM Logs",
   "/settings": "Settings",
+  "/profile": "Profile",
   "/diagnostics": "Diagnostics",
 };
 
@@ -52,6 +55,18 @@ export default function TopBar({
 }: TopBarProps) {
   const { t } = useI18n();
   const pathname = usePathname();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const title: StaticMessageKey =
     pageTitles[pathname] ??
     (pathname.endsWith("/edit")
@@ -124,6 +139,44 @@ export default function TopBar({
             </Button>
           </Link>
         )}
+
+        {/* User Profile & Logout Menu */}
+        <div className="relative" ref={userMenuRef}>
+          <button
+            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+            className="flex items-center gap-1.5 p-1.5 rounded-xl border border-border/80 bg-surface hover:bg-surface-hover text-foreground transition-all focus:outline-none"
+            aria-label="User menu"
+          >
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white text-[10px] font-black">
+              <User className="w-3.5 h-3.5" />
+            </div>
+            <ChevronDown className="w-3 h-3 text-muted" />
+          </button>
+
+          {isUserMenuOpen && (
+            <div className="absolute right-0 mt-2 w-48 rounded-xl bg-surface/95 border border-white/10 shadow-xl backdrop-blur-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
+              <Link
+                href="/profile"
+                onClick={() => setIsUserMenuOpen(false)}
+                className="flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-foreground hover:bg-white/[0.06] transition"
+              >
+                <User className="w-3.5 h-3.5 text-purple-400" />
+                <span>{t("Profile & Security")}</span>
+              </Link>
+              <div className="my-1 border-t border-border/50" />
+              <button
+                onClick={() => {
+                  setIsUserMenuOpen(false);
+                  signOut({ callbackUrl: "/login" });
+                }}
+                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-red-400 hover:bg-red-950/30 transition text-left"
+              >
+                <LogOut className="w-3.5 h-3.5 text-red-400" />
+                <span>{t("Sign Out")}</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

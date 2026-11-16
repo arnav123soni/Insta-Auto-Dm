@@ -2,10 +2,12 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Nodemailer from "next-auth/providers/nodemailer";
 import Resend from "next-auth/providers/resend";
 import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/db/client";
 import { ensureWorkspaceForUser, getPrimaryWorkspace } from "@/lib/workspace";
 import { isEmailAllowedToSignIn } from "@/lib/env";
+import { verifyPassword } from "@/lib/password";
 
 type AdapterPrismaClient = Parameters<typeof PrismaAdapter>[0];
 
@@ -28,6 +30,41 @@ export const isGoogleAuthEnabled = Boolean(
 export const authConfig = {
   adapter: PrismaAdapter(prisma as unknown as AdapterPrismaClient),
   providers: [
+    Credentials({
+      id: "credentials",
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+        const email = String(credentials.email).trim().toLowerCase();
+        const password = String(credentials.password);
+
+        const user = await prisma.user.findUnique({
+          where: { email },
+        });
+
+        if (!user || !user.passwordHash) {
+          return null;
+        }
+
+        const isValid = await verifyPassword(password, user.passwordHash);
+        if (!isValid) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        };
+      },
+    }),
     ...(isGoogleAuthEnabled
       ? [
           Google({
@@ -45,14 +82,22 @@ export const authConfig = {
         }),
   ],
   callbacks: {
-    // Runs before the magic link is sent, so a blocked address never receives
-    // one, and again when the link is verified.
     async signIn({ user }) {
       return isEmailAllowedToSignIn(user?.email);
     },
-    async session({ session, user }) {
+    async jwt({ token, user }) {
+      if (user?.id) {
+        token.sub = user.id;
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
       if (session.user) {
-        session.user.id = user.id;
+        if (token?.sub) {
+          session.user.id = token.sub;
+        } else if (user?.id) {
+          session.user.id = user.id;
+        }
       }
       return session;
     },
@@ -69,7 +114,8 @@ export const authConfig = {
     verifyRequest: "/verify-request",
   },
   session: {
-    strategy: "database",
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days persistent session
   },
   trustHost: true,
   secret: process.env.NEXTAUTH_SECRET,
