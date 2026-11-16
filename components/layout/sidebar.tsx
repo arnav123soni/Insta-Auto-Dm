@@ -21,6 +21,7 @@ import {
   Settings,
   User,
   Activity,
+  X,
 } from "lucide-react";
 
 const navItems = [
@@ -68,14 +69,15 @@ export default function Sidebar({
       >
         {/* Brand Header */}
         <div
-          className="px-5 py-5 border-b border-border/60 flex items-center justify-between"
+          className="px-5 py-4 border-b border-border/60 flex items-center justify-between"
           style={{ paddingTop: "calc(1.25rem + env(safe-area-inset-top))" }}
         >
           <Link
             href="/dashboard"
-            className="flex items-center gap-3 group focus:outline-none"
+            onClick={onClose}
+            className="flex items-center gap-3 group focus:outline-none min-w-0"
           >
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden shadow-md shadow-pink-500/20 group-hover:scale-105 transition-transform duration-200 ring-1 ring-white/10 bg-black/40">
+            <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden shadow-md shadow-pink-500/20 group-hover:scale-105 transition-transform duration-200 ring-1 ring-white/10 bg-black/40">
               <Image
                 src="/brand/icon-mark.png"
                 alt="InstaReply"
@@ -88,16 +90,25 @@ export default function Sidebar({
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
               </span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-base font-bold tracking-tight text-foreground flex items-center gap-1.5">
+            <div className="flex flex-col min-w-0">
+              <span className="text-base font-bold tracking-tight text-foreground flex items-center gap-1.5 truncate">
                 InstaReply
                 <Badge variant="indigo" size="sm" className="px-1.5 py-0 uppercase text-[9px] font-bold tracking-wider">
                   Pro
                 </Badge>
               </span>
-              <span className="text-[11px] text-muted font-medium">Instagram Auto-DM</span>
+              <span className="text-[11px] text-muted font-medium truncate">Instagram Auto-DM</span>
             </div>
           </Link>
+
+          {/* Close drawer button on mobile */}
+          <button
+            onClick={onClose}
+            className="lg:hidden p-1.5 rounded-lg text-muted hover:text-foreground hover:bg-white/[0.08] transition min-h-[36px] min-w-[36px] flex items-center justify-center"
+            aria-label={t("Close")}
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Navigation */}
@@ -114,7 +125,7 @@ export default function Sidebar({
                 onClick={onClose}
                 aria-current={isActive ? "page" : undefined}
                 className={`
-                  group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
+                  group flex items-center gap-3 px-3.5 py-3 sm:py-2.5 rounded-xl text-sm font-medium transition-all duration-200 min-h-[44px]
                   ${
                     isActive
                       ? "bg-accent/15 text-white font-semibold shadow-xs border border-accent/25 relative"
@@ -139,7 +150,10 @@ export default function Sidebar({
         </nav>
 
         {/* Workspace Card & Status Footer */}
-        <div className="p-4 border-t border-border/60 bg-surface-hover/30">
+        <div
+          className="p-4 border-t border-border/60 bg-surface-hover/30"
+          style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}
+        >
           <div className="mb-3">
             <LanguageSwitcher />
           </div>

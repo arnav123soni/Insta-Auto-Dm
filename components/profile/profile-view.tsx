@@ -220,7 +220,7 @@ export function ProfileView() {
             )}
 
             <form id="profile-form" onSubmit={handleUpdateProfile} className="mt-5 space-y-4">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-muted mb-1.5">
                     First Name
@@ -230,7 +230,7 @@ export function ProfileView() {
                     required
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full bg-background/80 border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition"
+                    className="w-full bg-background/80 border border-border rounded-xl px-3.5 py-3 sm:py-2.5 text-base sm:text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition min-h-[44px]"
                   />
                 </div>
                 <div>
@@ -241,7 +241,7 @@ export function ProfileView() {
                     type="text"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="w-full bg-background/80 border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition"
+                    className="w-full bg-background/80 border border-border rounded-xl px-3.5 py-3 sm:py-2.5 text-base sm:text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition min-h-[44px]"
                   />
                 </div>
               </div>
@@ -256,7 +256,7 @@ export function ProfileView() {
                     type="email"
                     disabled
                     value={profile?.email || ""}
-                    className="w-full bg-background/40 border border-border/50 rounded-xl pl-10 pr-4 py-2.5 text-sm text-muted cursor-not-allowed select-none"
+                    className="w-full bg-background/40 border border-border/50 rounded-xl pl-10 pr-4 py-3 sm:py-2.5 text-base sm:text-sm text-muted cursor-not-allowed select-none min-h-[44px]"
                   />
                 </div>
                 <p className="text-[11px] text-muted mt-1">
@@ -271,7 +271,7 @@ export function ProfileView() {
               type="submit"
               form="profile-form"
               disabled={savingProfile}
-              className="w-full bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-95 text-white font-bold py-2.5 px-4 rounded-xl shadow-md shadow-pink-950/40 transition flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-95 text-white font-bold py-3 sm:py-2.5 px-4 rounded-xl shadow-md shadow-pink-950/40 transition flex items-center justify-center gap-2 text-sm sm:text-base min-h-[46px] disabled:opacity-50"
             >
               {savingProfile ? (
                 <>
@@ -321,12 +321,14 @@ export function ProfileView() {
                     placeholder="Enter current password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full bg-background/80 border border-border rounded-xl px-3.5 pr-10 py-2.5 text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition"
+                    className="w-full bg-background/80 border border-border rounded-xl pl-3.5 pr-11 py-3 sm:py-2.5 text-base sm:text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition min-h-[44px]"
                   />
                   <button
                     type="button"
                     onClick={() => setShowCurrentPass(!showCurrentPass)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-muted hover:text-foreground transition"
+                    tabIndex={-1}
+                    aria-label={showCurrentPass ? "Hide current password" : "Show current password"}
                   >
                     {showCurrentPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -344,12 +346,14 @@ export function ProfileView() {
                     placeholder="At least 6 characters"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full bg-background/80 border border-border rounded-xl px-3.5 pr-10 py-2.5 text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition"
+                    className="w-full bg-background/80 border border-border rounded-xl pl-3.5 pr-11 py-3 sm:py-2.5 text-base sm:text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition min-h-[44px]"
                   />
                   <button
                     type="button"
                     onClick={() => setShowNewPass(!showNewPass)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-muted hover:text-foreground transition"
+                    tabIndex={-1}
+                    aria-label={showNewPass ? "Hide new password" : "Show new password"}
                   >
                     {showNewPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -366,7 +370,7 @@ export function ProfileView() {
                   placeholder="Re-enter new password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-background/80 border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition"
+                  className="w-full bg-background/80 border border-border rounded-xl px-3.5 py-3 sm:py-2.5 text-base sm:text-sm text-foreground placeholder-muted focus:outline-none focus:border-purple-500 transition min-h-[44px]"
                 />
               </div>
             </form>
@@ -377,7 +381,7 @@ export function ProfileView() {
               type="submit"
               form="password-form"
               disabled={savingPassword}
-              className="w-full bg-surface-elevated hover:bg-surface-hover border border-white/10 text-foreground font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+              className="w-full bg-surface-elevated hover:bg-surface-hover border border-white/10 text-foreground font-bold py-3 sm:py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 text-sm sm:text-base min-h-[46px] disabled:opacity-50"
             >
               {savingPassword ? (
                 <>
@@ -396,9 +400,9 @@ export function ProfileView() {
       </div>
 
       {/* Card 3: Active Session & Danger Zone */}
-      <div className="p-6 rounded-2xl bg-surface/80 border border-red-500/20 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
-        <div>
-          <h2 className="text-base font-bold text-foreground flex items-center gap-2">
+      <div className="p-5 sm:p-6 rounded-2xl bg-surface/80 border border-red-500/20 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+        <div className="text-center sm:text-left">
+          <h2 className="text-base font-bold text-foreground flex items-center justify-center sm:justify-start gap-2">
             <LogOut className="w-4 h-4 text-red-400" />
             Sign Out of Account
           </h2>
@@ -408,7 +412,7 @@ export function ProfileView() {
         </div>
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="shrink-0 px-5 py-2.5 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-300 font-semibold text-xs sm:text-sm transition flex items-center gap-2 active:scale-[0.98]"
+          className="w-full sm:w-auto shrink-0 px-5 py-2.5 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-300 font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2 active:scale-[0.98] min-h-[44px]"
         >
           <LogOut className="w-4 h-4" />
           <span>Log Out</span>

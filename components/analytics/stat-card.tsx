@@ -40,19 +40,19 @@ export default function StatCard({ label, value, trend, trendUp, icon }: StatCar
   const renderedIcon = icon ?? getIconForLabel(label);
 
   return (
-    <Card hover className="relative overflow-hidden p-4 sm:p-5 flex flex-col justify-between group">
+    <Card hover className="relative overflow-hidden p-3.5 sm:p-5 flex flex-col justify-between group">
       {/* Background ambient glow */}
       <div className="absolute -top-12 -right-12 w-24 h-24 rounded-full bg-indigo-500/5 blur-2xl pointer-events-none group-hover:bg-indigo-500/15 transition-all duration-300" />
 
       <div className="flex items-center justify-between gap-2 mb-2">
         <span className="text-xs sm:text-sm font-medium text-muted truncate">{label}</span>
-        <div className="shrink-0 p-2 rounded-xl bg-surface-elevated border border-white/10 group-hover:border-indigo-500/30 transition-colors">
+        <div className="shrink-0 p-1.5 sm:p-2 rounded-xl bg-surface-elevated border border-white/10 group-hover:border-indigo-500/30 transition-colors">
           {renderedIcon}
         </div>
       </div>
 
       <div className="mt-1 flex items-baseline justify-between gap-2">
-        <span className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground font-mono">
+        <span className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground font-mono truncate">
           {value}
         </span>
 
