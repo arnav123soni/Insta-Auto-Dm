@@ -124,18 +124,18 @@ export function AuthView() {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#08060f] text-foreground flex items-center justify-center p-4 sm:p-6 lg:p-12 overflow-x-hidden font-sans select-none">
+    <div className="relative min-h-dvh w-full bg-[#08060f] text-foreground flex items-center justify-center px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12 pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] overflow-x-hidden font-sans select-none">
       {/* Background Ambient Glows */}
-      <div className="pointer-events-none absolute -top-40 left-1/4 h-[500px] w-[500px] rounded-full bg-purple-700/15 blur-[140px]" />
-      <div className="pointer-events-none absolute -bottom-40 right-1/4 h-[500px] w-[500px] rounded-full bg-pink-600/15 blur-[140px]" />
-      <div className="pointer-events-none absolute bottom-10 left-1/3 h-[400px] w-[400px] rounded-full bg-orange-600/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -top-40 left-1/4 h-[350px] sm:h-[500px] w-[350px] sm:w-[500px] rounded-full bg-purple-700/15 blur-[100px] sm:blur-[140px]" />
+      <div className="pointer-events-none absolute -bottom-40 right-1/4 h-[350px] sm:h-[500px] w-[350px] sm:w-[500px] rounded-full bg-pink-600/15 blur-[100px] sm:blur-[140px]" />
+      <div className="pointer-events-none absolute bottom-10 left-1/3 h-[250px] sm:h-[400px] w-[250px] sm:w-[400px] rounded-full bg-orange-600/10 blur-[90px] sm:blur-[120px]" />
 
-      {/* Main Container: 2-Column Split Screen */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-        {/* LEFT COLUMN: Feature Showcase & 3D Pedestal */}
-        <div className="lg:col-span-7 flex flex-col justify-center space-y-8 pr-0 lg:pr-6">
-          {/* Top Brand Logo */}
-          <div className="flex items-center gap-3">
+      {/* Main Container: Mobile Stack (Auth first) -> Desktop 2-Column Split */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        {/* LEFT COLUMN (Desktop: col-span-7, Mobile: order-2 below card) */}
+        <div className="order-2 lg:order-1 w-full lg:col-span-7 flex flex-col justify-center space-y-6 sm:space-y-8 pr-0 lg:pr-6">
+          {/* Top Brand Logo - visible on desktop, hidden on mobile since auth card contains brand */}
+          <div className="hidden lg:flex items-center gap-3">
             <div className="relative w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-purple-950/60 ring-1 ring-white/20 bg-black/40">
               <Image
                 src="/brand/icon-mark.png"
@@ -157,14 +157,14 @@ export function AuthView() {
           </div>
 
           {/* Headline & Subtitle */}
-          <div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
-              Automate Your <br />
+          <div className="text-center lg:text-left">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tight text-white leading-[1.15]">
+              Automate Your{" "}
               <span className="bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] bg-clip-text text-transparent">
                 Instagram Replies
               </span>
             </h1>
-            <p className="mt-4 text-sm sm:text-base text-zinc-400 max-w-lg leading-relaxed">
+            <p className="mt-3 sm:mt-4 text-xs sm:text-sm lg:text-base text-zinc-400 max-w-lg leading-relaxed mx-auto lg:mx-0">
               AI-powered auto-reply system for your Instagram DMs &amp; comments. Never miss a lead again.
             </p>
           </div>
@@ -172,88 +172,88 @@ export function AuthView() {
           {/* Grid Layout: Left Feature Pills + Right 3D Pedestal */}
           <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
             {/* 3 Feature Pills */}
-            <div className="sm:col-span-5 flex flex-col space-y-3.5">
+            <div className="sm:col-span-5 flex flex-col space-y-3 sm:space-y-3.5">
               {/* Feature 1 */}
-              <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all hover:bg-white/[0.05]">
-                <div className="p-2.5 rounded-xl bg-purple-900/40 text-purple-400 border border-purple-500/30 shrink-0">
+              <div className="flex items-start gap-3 sm:gap-3.5 p-3 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all hover:bg-white/[0.05]">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-purple-900/40 text-purple-400 border border-purple-500/30 shrink-0">
                   <Zap className="w-4 h-4 fill-purple-400/20" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-white">Auto Reply</h2>
-                  <p className="text-xs text-zinc-400 mt-0.5">Instant responses to DMs &amp; comments</p>
+                  <h2 className="text-xs sm:text-sm font-bold text-white">Auto Reply</h2>
+                  <p className="text-[11px] sm:text-xs text-zinc-400 mt-0.5">Instant responses to DMs &amp; comments</p>
                 </div>
               </div>
 
               {/* Feature 2 */}
-              <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all hover:bg-white/[0.05]">
-                <div className="p-2.5 rounded-xl bg-pink-900/40 text-pink-400 border border-pink-500/30 shrink-0">
+              <div className="flex items-start gap-3 sm:gap-3.5 p-3 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all hover:bg-white/[0.05]">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-pink-900/40 text-pink-400 border border-pink-500/30 shrink-0">
                   <Layers className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-white">Smart Rules</h2>
-                  <p className="text-xs text-zinc-400 mt-0.5">Keyword &amp; intent based automation</p>
+                  <h2 className="text-xs sm:text-sm font-bold text-white">Smart Rules</h2>
+                  <p className="text-[11px] sm:text-xs text-zinc-400 mt-0.5">Keyword &amp; intent based automation</p>
                 </div>
               </div>
 
               {/* Feature 3 */}
-              <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all hover:bg-white/[0.05]">
-                <div className="p-2.5 rounded-xl bg-orange-900/40 text-orange-400 border border-orange-500/30 shrink-0">
+              <div className="flex items-start gap-3 sm:gap-3.5 p-3 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all hover:bg-white/[0.05]">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-orange-900/40 text-orange-400 border border-orange-500/30 shrink-0">
                   <BarChart3 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-white">Track Performance</h2>
-                  <p className="text-xs text-zinc-400 mt-0.5">Analytics, leads &amp; engagement insights</p>
+                  <h2 className="text-xs sm:text-sm font-bold text-white">Track Performance</h2>
+                  <p className="text-[11px] sm:text-xs text-zinc-400 mt-0.5">Analytics, leads &amp; engagement insights</p>
                 </div>
               </div>
             </div>
 
-            {/* 3D Pedestal Graphic & Floating Badges */}
-            <div className="sm:col-span-7 relative flex items-center justify-center min-h-[280px]">
-              {/* Pedestal Image */}
-              <div className="relative w-full max-w-[340px] aspect-square">
+            {/* 3D Pedestal Graphic & Floating Badges - Clamped to prevent horizontal overflow */}
+            <div className="sm:col-span-7 relative flex items-center justify-center min-h-[240px] sm:min-h-[280px]">
+              {/* Pedestal Image Container */}
+              <div className="relative w-full max-w-[260px] xs:max-w-[300px] sm:max-w-[340px] aspect-square mx-auto">
                 <Image
                   src="/brand/pedestal.png"
                   alt="3D Instagram Automation Pedestal"
                   fill
-                  sizes="340px"
+                  sizes="(max-width: 640px) 260px, (max-width: 1024px) 300px, 340px"
                   className="object-contain drop-shadow-[0_20px_50px_rgba(220,39,67,0.3)]"
                   priority
                 />
 
                 {/* Floating Notification Pill: Top-Left New DM */}
-                <div className="absolute top-2 -left-2 sm:left-2 flex items-center gap-2 bg-[#161226]/90 border border-purple-500/40 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg shadow-purple-950/80 animate-bounce duration-1000">
-                  <Send className="w-3.5 h-3.5 text-purple-400" />
-                  <span className="text-xs font-semibold text-white">New DM</span>
-                  <span className="bg-pink-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
+                <div className="absolute top-2 sm:top-4 left-0 sm:-left-2 flex items-center gap-1.5 sm:gap-2 bg-[#161226]/90 border border-purple-500/40 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg shadow-purple-950/80 animate-bounce duration-1000 select-none">
+                  <Send className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-purple-400" />
+                  <span className="text-[11px] sm:text-xs font-semibold text-white">New DM</span>
+                  <span className="bg-pink-500 text-white text-[9px] sm:text-[10px] font-bold px-1.5 py-0.2 rounded-full">
                     3
                   </span>
                 </div>
 
                 {/* Floating Notification Pill: Top-Right New Comment */}
-                <div className="absolute top-12 -right-2 sm:right-2 flex items-center gap-2 bg-[#161226]/90 border border-pink-500/40 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg shadow-pink-950/80">
-                  <MessageCircle className="w-3.5 h-3.5 text-pink-400" />
-                  <span className="text-xs font-semibold text-white">New Comment</span>
-                  <span className="bg-pink-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
+                <div className="absolute top-10 sm:top-12 right-0 sm:-right-2 flex items-center gap-1.5 sm:gap-2 bg-[#161226]/90 border border-pink-500/40 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg shadow-pink-950/80 select-none">
+                  <MessageCircle className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-pink-400" />
+                  <span className="text-[11px] sm:text-xs font-semibold text-white">New Comment</span>
+                  <span className="bg-pink-500 text-white text-[9px] sm:text-[10px] font-bold px-1.5 py-0.2 rounded-full">
                     7
                   </span>
                 </div>
 
                 {/* Floating Notification Pill: Bottom Auto Reply Sent */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-[#161226]/95 border border-purple-500/50 backdrop-blur-md px-3.5 py-1.5 rounded-full shadow-xl shadow-purple-950/90 whitespace-nowrap">
-                  <span className="text-xs font-semibold text-white">Auto Reply Sent</span>
-                  <Check className="w-3.5 h-3.5 text-purple-300 stroke-[3]" />
+                <div className="absolute bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-[#161226]/95 border border-purple-500/50 backdrop-blur-md px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full shadow-xl shadow-purple-950/90 whitespace-nowrap select-none">
+                  <span className="text-[11px] sm:text-xs font-semibold text-white">Auto Reply Sent</span>
+                  <Check className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-purple-300 stroke-[3]" />
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Glassmorphism Auth Card */}
-        <div className="lg:col-span-5 flex justify-center">
-          <div className="w-full max-w-md rounded-3xl bg-[#0f0c1b]/85 border border-white/10 p-7 sm:p-9 backdrop-blur-2xl shadow-2xl shadow-purple-950/60 ring-1 ring-white/5">
+        {/* RIGHT COLUMN (Desktop: col-span-5, Mobile: order-1 primary focal point) */}
+        <div className="order-1 lg:order-2 w-full lg:col-span-5 flex justify-center">
+          <div className="w-full max-w-[420px] rounded-3xl bg-[#0f0c1b]/85 border border-white/10 p-5 sm:p-7 md:p-8 backdrop-blur-2xl shadow-2xl shadow-purple-950/60 ring-1 ring-white/5">
             {/* Card Brand Header */}
             <div className="flex flex-col items-center text-center">
-              <div className="relative w-14 h-14 rounded-2xl overflow-hidden shadow-lg shadow-pink-950/60 ring-1 ring-white/20 bg-black/40 mb-3">
+              <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shadow-lg shadow-pink-950/60 ring-1 ring-white/20 bg-black/40 mb-3">
                 <Image
                   src="/brand/icon-mark.png"
                   alt="InstaReply"
@@ -262,15 +262,15 @@ export function AuthView() {
                   className="object-cover"
                 />
               </div>
-              <div className="text-sm font-black tracking-tight text-white flex items-center gap-1">
+              <div className="text-xs sm:text-sm font-black tracking-tight text-white flex items-center gap-1">
                 Insta<span className="text-[#bc1888]">Reply</span>
-                <span className="text-[9px] uppercase tracking-widest text-zinc-400 ml-1">SYSTEM</span>
+                <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-zinc-400 ml-1">SYSTEM</span>
               </div>
 
-              <h2 className="text-2xl font-black text-white mt-4 tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-black text-white mt-3 sm:mt-4 tracking-tight">
                 {mode === "login" ? "Welcome Back" : "Create Account"}
               </h2>
-              <p className="text-xs text-zinc-400 mt-1">
+              <p className="text-[11px] sm:text-xs text-zinc-400 mt-1">
                 {mode === "login"
                   ? "Login to your InstaReply account"
                   : "Start automating your Instagram replies"}
@@ -290,10 +290,10 @@ export function AuthView() {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+            <form onSubmit={handleSubmit} className="mt-5 sm:mt-6 space-y-3.5 sm:space-y-4">
               {/* Sign Up Mode: Name Fields */}
               {mode === "signup" && (
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
                   <div className="relative">
                     <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
                     <input
@@ -302,7 +302,7 @@ export function AuthView() {
                       placeholder="First name"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full bg-[#181329] border border-[#2e264a] rounded-xl pl-10 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition"
+                      className="w-full bg-[#181329] border border-[#2e264a] rounded-xl pl-10 pr-3 py-3 sm:py-2.5 text-base sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition min-h-[44px]"
                     />
                   </div>
                   <div className="relative">
@@ -311,13 +311,13 @@ export function AuthView() {
                       placeholder="Last name (opt)"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full bg-[#181329] border border-[#2e264a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition"
+                      className="w-full bg-[#181329] border border-[#2e264a] rounded-xl px-3.5 py-3 sm:py-2.5 text-base sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition min-h-[44px]"
                     />
                   </div>
                 </div>
               )}
 
-              {/* Email Field */}
+              {/* Email Field - text-base prevents iOS Safari auto-zoom on input focus */}
               <div className="relative">
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
                 <input
@@ -326,11 +326,11 @@ export function AuthView() {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#181329] border border-[#2e264a] rounded-xl pl-10 pr-4 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition"
+                  className="w-full bg-[#181329] border border-[#2e264a] rounded-xl pl-10 pr-4 py-3 sm:py-2.5 text-base sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition min-h-[44px]"
                 />
               </div>
 
-              {/* Password Field */}
+              {/* Password Field - 44px min tap target for show/hide */}
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
                 <input
@@ -339,13 +339,14 @@ export function AuthView() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#181329] border border-[#2e264a] rounded-xl pl-10 pr-10 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition"
+                  className="w-full bg-[#181329] border border-[#2e264a] rounded-xl pl-10 pr-11 py-3 sm:py-2.5 text-base sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition min-h-[44px]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-zinc-500 hover:text-zinc-300 transition"
                   tabIndex={-1}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -354,19 +355,19 @@ export function AuthView() {
               {/* Login Mode Extras: Remember Me & Forgot Password */}
               {mode === "login" && (
                 <div className="flex items-center justify-between text-xs pt-0.5">
-                  <label className="flex items-center gap-2 text-zinc-400 cursor-pointer select-none">
+                  <label className="flex items-center gap-2 text-zinc-400 cursor-pointer select-none py-1">
                     <input
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="rounded border-[#2e264a] bg-[#181329] text-pink-500 focus:ring-purple-500/30"
+                      className="rounded border-[#2e264a] bg-[#181329] text-pink-500 focus:ring-purple-500/30 w-4 h-4"
                     />
                     <span>Remember me</span>
                   </label>
                   <button
                     type="button"
                     onClick={() => setError("Password reset link will be sent to your email.")}
-                    className="text-purple-400 hover:text-purple-300 transition font-medium"
+                    className="text-purple-400 hover:text-purple-300 transition font-medium py-1"
                   >
                     Forgot password?
                   </button>
@@ -377,7 +378,7 @@ export function AuthView() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-95 active:scale-[0.99] text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-pink-950/50 transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                className="w-full bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-95 active:scale-[0.99] text-white font-bold py-3.5 sm:py-3 px-4 rounded-xl shadow-lg shadow-pink-950/50 transition-all flex items-center justify-center gap-2 text-sm sm:text-base min-h-[48px] disabled:opacity-50 disabled:cursor-not-allowed mt-2"
               >
                 {loading ? (
                   <>
@@ -391,7 +392,7 @@ export function AuthView() {
             </form>
 
             {/* Divider */}
-            <div className="relative my-5">
+            <div className="relative my-4 sm:my-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-white/10" />
               </div>
@@ -404,10 +405,10 @@ export function AuthView() {
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="w-full bg-[#181329] hover:bg-[#201a37] border border-[#2e264a] text-zinc-300 text-xs sm:text-sm font-medium py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2.5 active:scale-[0.99]"
+              className="w-full bg-[#181329] hover:bg-[#201a37] border border-[#2e264a] text-zinc-300 text-xs sm:text-sm font-medium py-3 sm:py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2.5 active:scale-[0.99] min-h-[46px]"
             >
               {/* Official Google G SVG */}
-              <svg className="w-4 h-4" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -429,7 +430,7 @@ export function AuthView() {
             </button>
 
             {/* Toggle Footer */}
-            <div className="mt-6 text-center text-xs text-zinc-400">
+            <div className="mt-5 sm:mt-6 text-center text-xs text-zinc-400">
               {mode === "login" ? (
                 <>
                   Don&apos;t have an account?{" "}
@@ -440,7 +441,7 @@ export function AuthView() {
                       setError(null);
                       setSuccess(null);
                     }}
-                    className="text-[#bc1888] font-bold hover:text-pink-400 transition ml-1"
+                    className="text-[#bc1888] font-bold hover:text-pink-400 transition ml-1 p-1"
                   >
                     Sign Up
                   </button>
@@ -455,7 +456,7 @@ export function AuthView() {
                       setError(null);
                       setSuccess(null);
                     }}
-                    className="text-[#bc1888] font-bold hover:text-pink-400 transition ml-1"
+                    className="text-[#bc1888] font-bold hover:text-pink-400 transition ml-1 p-1"
                   >
                     Log In
                   </button>

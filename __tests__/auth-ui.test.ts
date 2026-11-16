@@ -49,3 +49,36 @@ describe("Brand Visual Assets", () => {
     expect(fs.existsSync(path.join(brandDir, "pedestal.png"))).toBe(true);
   });
 });
+
+describe("Responsive UI Specifications in AuthView", () => {
+  const authViewPath = path.resolve(__dirname, "../components/auth/auth-view.tsx");
+  const authViewSource = fs.readFileSync(authViewPath, "utf-8");
+
+  it("uses dynamic viewport height (min-h-dvh) to avoid mobile address bar jumps", () => {
+    expect(authViewSource).toContain("min-h-dvh");
+  });
+
+  it("includes iOS safe area padding insets", () => {
+    expect(authViewSource).toContain("safe-area-inset-top");
+    expect(authViewSource).toContain("safe-area-inset-bottom");
+  });
+
+  it("prevents iOS Safari auto-zoom on input focus with text-base sm:text-sm", () => {
+    expect(authViewSource).toContain("text-base sm:text-sm");
+  });
+
+  it("enforces minimum touch targets of at least 44px for accessibility", () => {
+    expect(authViewSource).toContain("min-h-[44px]");
+    expect(authViewSource).toContain("min-h-[48px]");
+  });
+
+  it("clamps 3D pedestal badges on mobile to prevent horizontal viewport overflow", () => {
+    expect(authViewSource).toContain("left-0 sm:-left-2");
+    expect(authViewSource).toContain("right-0 sm:-right-2");
+  });
+
+  it("orders auth card above showcase on mobile and side-by-side on desktop", () => {
+    expect(authViewSource).toContain("order-1 lg:order-2");
+    expect(authViewSource).toContain("order-2 lg:order-1");
+  });
+});
